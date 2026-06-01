@@ -6,7 +6,6 @@
     <title>App Xem Video 360 Độ</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <style>
-        /* Giao diện nút bấm tùy chỉnh */
         #controls {
             position: absolute;
             bottom: 20px;
@@ -18,15 +17,13 @@
         }
         button {
             padding: 12px 20px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             color: white;
-            border: 1px solid white;
-            border-radius: 5px;
+            border: 1px solid #fff;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 14px;
-        }
-        button:hover {
-            background: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
         }
     </style>
 </head>
@@ -38,7 +35,6 @@
     </div>
 
     <a-scene loading-screen="enabled: false">
-        
         <a-assets>
             <video id="video360" 
                    src="https://bitmovin-a.akamaihd.net/content/playhouse-vr/progressive.mp4" 
@@ -50,10 +46,9 @@
             </video>
         </a-assets>
 
-        <a-videosphere src="#video360" rotation="0 -90 0"></a-videosphere>
+        <a-videosphere src="https://youtu.be/hEdzv7D4CbQ?si=phdCWaJJtRGGvcV8" rotation="0 -90 0"></a-videosphere>
 
         <a-entity camera look-controls></a-entity>
-
     </a-scene>
 
     <script>
@@ -61,7 +56,7 @@
         const playBtn = document.getElementById('playBtn');
         const permissionBtn = document.getElementById('permissionBtn');
 
-        // Xử lý nút Play/Pause
+        // Trình duyệt chặn tự động phát video có tiếng, nên cần người dùng bấm nút này để kích hoạt
         playBtn.addEventListener('click', () => {
             if (video.paused) {
                 video.play();
@@ -72,19 +67,17 @@
             }
         });
 
-        // Xử lý cấp quyền cảm biến riêng cho thiết bị iOS (iPhone/iPad)
+        // Xin quyền truy cập cảm biến chuyển động riêng cho iPhone (iOS)
         if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-            // Hiện nút xin quyền nếu là iOS
             permissionBtn.style.display = "block";
-            
             permissionBtn.addEventListener('click', () => {
                 DeviceOrientationEvent.requestPermission()
                     .then(permissionState => {
                         if (permissionState === 'granted') {
-                            permissionBtn.style.display = 'none'; // Ẩn nút sau khi đã cấp quyền
-                            window.location.reload(); // Tải lại để A-Frame nhận cảm biến
+                            permissionBtn.style.display = 'none';
+                            window.location.reload(); 
                         } else {
-                            alert('Bạn cần cấp quyền cảm biến để xoay được video!');
+                            alert('Vui lòng cấp quyền cảm biến để xoay được góc nhìn!');
                         }
                     })
                     .catch(console.error);
